@@ -1,0 +1,28 @@
+.form-container
+    {border:0px solid #fff; padding:20px 60px; margin-top:150px;
+    -webkit-box-shadow: 10px 2px 22px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 2px 22px 0px rgba(0,0,0,0.75);
+    box-shadow: 10px 2px 22px 0px rgba(0,0,0,0.75);
+    font-family: "Times New Roman", Times, serif;
+    color:black;
+}
+
+body {
+  color:black;  
+}
+
+/*the container must be positioned relative:*/
+.autocomplete {
+  display: inline-block;
+}
+
+
+.autocomplete-items {
+  position: absolute;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+

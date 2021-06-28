@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='house.css') }}">
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+    body{
+        background-image: url({{ url_for('static', filename='bgimg.jpg') }})
+    }
+</style>
+</head>
+<body>
+ <div class="container-fluid bg" >
+  <div class="row">
+   <div class="col-md-4 col-sm-4 col-xs-12"></div>
+    <div class="col-md-4 col-sm-4 col-xs-12">
+     <!--form start-->
+     <form class="form-container" novalidate autocomplete="off" method="POST" action="{{url_for('man')}}">
+     <h1>Enter Details</h1>
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input class="form-control" id="myInput" type="text" name="myCountry" placeholder="Location">
+        </div>
+        <div class="form-group">
+          <label for="sqft">Square Foot</label>
+          <input type="text" class="form-control" name="sqft" placeholder="Sqft">
+         </div>
+        <div class="form-group">
+          <label for="bath">Bath</label>
+          <input type="text" class="form-control" name="bath" placeholder="Bath">
+        </div>
+        <div class="form-group">
+          <label for="bhk">BHK</label>
+          <input type="text" class="form-control" name="bhk" placeholder="BHK">
+        </div>
+         <div>
+             <button type="submit" class="btn btn-success btn-block">See Estimated Price</button>
+         </div>
+     </form>
+    </div>
+   <div class="col-md-4 col-sm-4 col-xs-12"></div>
+  </div>
+ </div>
+ 
+ </body>
+<script>
+function autocomplete(inp, arr) {
+  /*the autocomplete function takes two arguments,
+  the text field element and an array of possible autocompleted values:*/
+  var currentFocus;
+  /*execute a function when someone writes in the text field:*/
+  inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      /*close any already open lists of autocompleted values*/
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      /*create a DIV element that will contain the items (values):*/
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      /*append the DIV element as a child of the autocomplete container:*/
+      this.parentNode.appendChild(a);
+      /*for each item in the array...*/
+      for (i = 0; i < arr.length; i++) {
+        /*check if the item starts with the same letters as the text field value:*/
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*create a DIV element for each matching element:*/
+          b = document.createElement("DIV");
+          /*make the matching letters bold:*/
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          /*insert a input field that will hold the current array item's value:*/
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          /*execute a function when someone clicks on the item value (DIV element):*/
+          b.addEventListener("click", function(e) {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              /*close the list of autocompleted values,
+              (or any other open lists of autocompleted values:*/
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+  });
+  /*execute a function presses a key on the keyboard:*/
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        /*If the arrow DOWN key is pressed,
+        increase the currentFocus variable:*/
+        currentFocus++;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        /*If the arrow UP key is pressed,
+        decrease the currentFocus variable:*/
+        currentFocus--;
+        /*and and make the current item more visible:*/
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        /*If the ENTER key is pressed, prevent the form from being submitted,*/
+        e.preventDefault();
+        if (currentFocus > -1) {
+          /*and simulate a click on the "active" item:*/
+          if (x) x[currentFocus].click();
+        }
+      }
+  });
+  function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+  }
+  function closeAllLists(elmnt) {
+    /*close all autocomplete lists in the document,
+    except the one passed as an argument:*/
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+        x[i].parentNode.removeChild(x[i]);
+      }
+    }
+  }
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  });
+}
+
+/*An array containing all the country names in the world:*/
+var countries = [' Devarachikkanahalli',
+ '1st Block Jayanagar',
+ '1st Block Koramangala',
+ '1st Phase JP Nagar',
+ '2nd Phase Judicial Layout',
+ '2nd Stage Nagarbhavi',
+ '5th Block Hbr Layout',
+ '5th Phase JP Nagar',
+ '6th Phase JP Nagar',
+ '7th Phase JP Nagar',
+ '8th Phase JP Nagar',
+ '9th Phase JP Nagar',
+ 'AECS Layout',
+ 'Abbigere',
+ 'Akshaya Nagar',
+ 'Ambalipura',
+ 'Ambedkar Nagar',
+ 'Amruthahalli',
+ 'Anandapura',
+ 'Ananth Nagar',
+ 'Anekal',
+ 'Anjanapura',
+ 'Ardendale',
+ 'Arekere',
+ 'Attibele',
+ 'BEML Layout',
+ 'BTM 1st Stage',
+ 'BTM 2nd Stage',
+ 'BTM Layout',
+ 'Babusapalaya',
+ 'Badavala Nagar',
+ 'Balagere',
+ 'Banashankari',
+ 'Banashankari Stage II',
+ 'Banashankari Stage III',
+ 'Banashankari Stage V',
+ 'Banashankari Stage VI',
+ 'Banaswadi',
+ 'Banjara Layout',
+ 'Bannerghatta',
+ 'Bannerghatta Road',
+ 'Basapura',
+ 'Basavangudi',
+ 'Basaveshwara Nagar',
+ 'Battarahalli',
+ 'Begur',
+ 'Begur Road',
+ 'Bellandur',
+ 'Benson Town',
+ 'Bharathi Nagar',
+ 'Bhoganhalli',
+ 'Billekahalli',
+ 'Binny Pete',
+ 'Bisuvanahalli',
+ 'Bommanahalli',
+ 'Bommasandra',
+ 'Bommasandra Industrial Area',
+ 'Bommenahalli',
+ 'Brookefield',
+ 'Budigere',
+ 'CV Raman Nagar',
+ 'Chamrajpet',
+ 'Chandapura',
+ 'Channasandra',
+ 'Chikka Tirupathi',
+ 'Chikkabanavar',
+ 'Chikkalasandra',
+ 'Choodasandra',
+ 'Cooke Town',
+ 'Cox Town',
+ 'Cunningham Road',
+ 'Dairy Circle',
+ 'Dasanapura',
+ 'Dasarahalli',
+ 'Devanahalli',
+ 'Dodda Nekkundi',
+ 'Doddaballapur',
+ 'Doddakallasandra',
+ 'Doddathoguru',
+ 'Dodsworth Layout',
+ 'Domlur',
+ 'Dommasandra',
+ 'EPIP Zone',
+ 'Electronic City',
+ 'Electronic City Phase II',
+ 'Electronics City Phase 1',
+ 'Frazer Town',
+ 'GM Palaya',
+ 'Ganga Nagar',
+ 'Garudachar Palya',
+ 'Giri Nagar',
+ 'Gollarapalya Hosahalli',
+ 'Gottigere',
+ 'Green Glen Layout',
+ 'Gubbalala',
+ 'Gunjur',
+ 'Gunjur Palya',
+ 'HAL 2nd Stage',
+ 'HBR Layout',
+ 'HRBR Layout',
+ 'HSR Layout',
+ 'Haralur Road',
+ 'Harlur',
+ 'Hebbal',
+ 'Hebbal Kempapura',
+ 'Hegde Nagar',
+ 'Hennur',
+ 'Hennur Road',
+ 'Hoodi',
+ 'Horamavu Agara',
+ 'Horamavu Banaswadi',
+ 'Hormavu',
+ 'Hosa Road',
+ 'Hosakerehalli',
+ 'Hoskote',
+ 'Hosur Road',
+ 'Hulimavu',
+ 'ISRO Layout',
+ 'ITPL',
+ 'Iblur Village',
+ 'Indira Nagar',
+ 'JP Nagar',
+ 'Jakkur',
+ 'Jalahalli',
+ 'Jalahalli East',
+ 'Jigani',
+ 'Judicial Layout',
+ 'KR Puram',
+ 'Kadubeesanahalli',
+ 'Kadugodi',
+ 'Kaggadasapura',
+ 'Kaggalipura',
+ 'Kaikondrahalli',
+ 'Kalena Agrahara',
+ 'Kalkere',
+ 'Kalyan nagar',
+ 'Kambipura',
+ 'Kammanahalli',
+ 'Kammasandra',
+ 'Kanakapura',
+ 'Kanakpura Road',
+ 'Kannamangala',
+ 'Karuna Nagar',
+ 'Kasavanhalli',
+ 'Kasturi Nagar',
+ 'Kathriguppe',
+ 'Kaval Byrasandra',
+ 'Kenchenahalli',
+ 'Kengeri',
+ 'Kengeri Satellite Town',
+ 'Kereguddadahalli',
+ 'Kodichikkanahalli',
+ 'Kodigehaali',
+ 'Kodigehalli',
+ 'Kodihalli',
+ 'Kogilu',
+ 'Konanakunte',
+ 'Koramangala',
+ 'Kothannur',
+ 'Kothanur',
+ 'Kudlu',
+ 'Kudlu Gate',
+ 'Kumaraswami Layout',
+ 'Kundalahalli',
+ 'LB Shastri Nagar',
+ 'Laggere',
+ 'Lakshminarayana Pura',
+ 'Lingadheeranahalli',
+ 'Magadi Road',
+ 'Mahadevpura',
+ 'Mahalakshmi Layout',
+ 'Mallasandra',
+ 'Malleshpalya',
+ 'Malleshwaram',
+ 'Marathahalli',
+ 'Margondanahalli',
+ 'Marsur',
+ 'Mico Layout',
+ 'Munnekollal',
+ 'Murugeshpalya',
+ 'Mysore Road',
+ 'NGR Layout',
+ 'NRI Layout',
+ 'Nagadevanahalli',
+ 'Naganathapura',
+ 'Nagappa Reddy Layout',
+ 'Nagarbhavi',
+ 'Nagasandra',
+ 'Nagavara',
+ 'Nagavarapalya',
+ 'Narayanapura',
+ 'Neeladri Nagar',
+ 'Nehru Nagar',
+ 'OMBR Layout',
+ 'Old Airport Road',
+ 'Old Madras Road',
+ 'Padmanabhanagar',
+ 'Pai Layout',
+ 'Panathur',
+ 'Parappana Agrahara',
+ 'Pattandur Agrahara',
+ 'Poorna Pragna Layout',
+ 'Prithvi Layout',
+ 'R.T. Nagar',
+ 'Rachenahalli',
+ 'Raja Rajeshwari Nagar',
+ 'Rajaji Nagar',
+ 'Rajiv Nagar',
+ 'Ramagondanahalli',
+ 'Ramamurthy Nagar',
+ 'Rayasandra',
+ 'Sadashiva Nagar',
+ 'Sahakara Nagar',
+ 'Sanjay nagar',
+ 'Sarakki Nagar',
+ 'Sarjapur',
+ 'Sarjapur  Road',
+ 'Sarjapura - Attibele Road',
+ 'Sector 2 HSR Layout',
+ 'Sector 7 HSR Layout',
+ 'Seegehalli',
+ 'Shampura',
+ 'Shivaji Nagar',
+ 'Singasandra',
+ 'Somasundara Palya',
+ 'Sompura',
+ 'Sonnenahalli',
+ 'Subramanyapura',
+ 'Sultan Palaya',
+ 'TC Palaya',
+ 'Talaghattapura',
+ 'Thanisandra',
+ 'Thigalarapalya',
+ 'Thubarahalli',
+ 'Thyagaraja Nagar',
+ 'Tindlu',
+ 'Tumkur Road',
+ 'Ulsoor',
+ 'Uttarahalli',
+ 'Varthur',
+ 'Varthur Road',
+ 'Vasanthapura',
+ 'Vidyaranyapura',
+ 'Vijayanagar',
+ 'Vishveshwarya Layout',
+ 'Vishwapriya Layout',
+ 'Vittasandra',
+ 'Whitefield',
+ 'Yelachenahalli',
+ 'Yelahanka',
+ 'Yelahanka New Town',
+ 'Yelenahalli',
+ 'Yeshwanthpur',
+ 'other'];
+
+/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(document.getElementById("myInput"), countries);
+</script>
+</html>

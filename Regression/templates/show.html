@@ -1,0 +1,22 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+    
+<style>
+    body{
+        background-image: url({{ url_for('static', filename='new.jpg') }})
+    }
+</style>
+<body>
+    <center>
+    <h1 style="font-size:50px;color:white">House Price Prediction</h1>
+    <br>
+    <p style="font-size:30px;color:white">
+    <img src='static/house.jpg' alt="house" style="width:400px;height:400px;margin-left:15px;float:left">The estimated cost for the house with given data is: <br> {{ data }} Lakhs </p>
+        <button onclick="location.href = '/';" class="btn btn-info" type="button" >Back to Home</button>
+    </center>
+    </body>
+</html>
